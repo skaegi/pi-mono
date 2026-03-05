@@ -63,6 +63,7 @@ Unified LLM API with automatic model discovery, provider configuration, token an
 - **Google Gemini CLI** (requires OAuth, see below)
 - **Antigravity** (requires OAuth, see below)
 - **Amazon Bedrock**
+- **IBM watsonx.ai** (IBM Cloud or watsonx software)
 - **Kimi For Coding** (Moonshot AI, uses Anthropic-compatible API)
 - **Any OpenAI-compatible API**: Ollama, vLLM, LM Studio, etc.
 
@@ -904,6 +905,7 @@ In Node.js environments, you can set environment variables to avoid passing API 
 | zAI | `ZAI_API_KEY` |
 | MiniMax | `MINIMAX_API_KEY` |
 | Kimi For Coding | `KIMI_API_KEY` |
+| IBM watsonx.ai | `WATSONX_AI_APIKEY` + `WATSONX_AI_PROJECT_ID` (or `WATSONX_AI_SPACE_ID`) + optional `WATSONX_AI_SERVICE_URL` |
 | GitHub Copilot | `COPILOT_GITHUB_TOKEN` or `GH_TOKEN` or `GITHUB_TOKEN` |
 
 When set, the library automatically uses these keys:
@@ -998,6 +1000,42 @@ import { getModel, complete } from '@mariozechner/pi-ai';
 ```
 
 Official docs: [Application Default Credentials](https://cloud.google.com/docs/authentication/application-default-credentials)
+
+### IBM watsonx.ai Setup
+
+IBM watsonx.ai requires an API key and either a project ID or space ID:
+
+1. **Get your API key** from IBM Cloud
+2. **Get your project/space ID** from your watsonx.ai workspace
+3. **Set environment variables**:
+
+```bash
+export WATSONX_AI_APIKEY="your-api-key"
+export WATSONX_AI_PROJECT_ID="your-project-id"  # or WATSONX_AI_SPACE_ID
+export WATSONX_AI_SERVICE_URL="https://us-south.ml.cloud.ibm.com"  # optional, defaults to us-south
+```
+
+Example usage:
+
+```typescript
+import { getModel, complete } from '@mariozechner/pi-ai';
+
+const model = getModel('ibm-watsonx', 'ibm/granite-3-3-8b-instruct');
+const response = await complete(model, {
+  messages: [{ role: 'user', content: 'Hello!' }]
+});
+
+// Or pass config explicitly
+const response2 = await complete(model, {
+  messages: [{ role: 'user', content: 'Hello!' }]
+}, {
+  apiKey: 'your-api-key',
+  projectId: 'your-project-id',
+  serviceUrl: 'https://us-south.ml.cloud.ibm.com'
+});
+```
+
+Available models include IBM Granite, Llama, Mistral, and other models deployed to your watsonx.ai instance.
 
 ### CLI Login
 

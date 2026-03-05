@@ -10,6 +10,8 @@ packages/*/dist-firefox/
 
 # Environment
 .env
+.env.*
+!.env.example
 
 # Editor files
 .vscode/

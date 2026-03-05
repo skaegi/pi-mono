@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Added
+- Added support for IBM watsonx.ai provider with streaming, tool calling, and multimodal capabilities
+
 ## [0.51.6] - 2026-02-04
 
 ### Fixed
